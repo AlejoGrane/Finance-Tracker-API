@@ -1,11 +1,12 @@
-const EXPRESS = require(`express`);
+const express = require(`express`);
+const authRoutes = require("./src/routes/auth.routes");
+const app = express();
 
-const APP = EXPRESS();
+app.use(express.json());
+app.use("/auth", authRoutes);
 
-APP.use(EXPRESS.json());
-
-APP.get(`/`, (req, res) => {
+app.get(`/`, (req, res) => {
   res.json({ message: `Expense Tracker API funcionando ` });
 });
 
-module.exports = APP;
+module.exports = app;
