@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { createUser, findUserByEmail } = require("../models/user.model");
-const jwt = require("jsonwebtoken");
+const { generateToken } = require("../utils/jwt");
 
 function isValidEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -44,9 +44,9 @@ async function login(req, res) {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Credenciales invalidas" });
     }
-    const tokenUser = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
+
+    const tokenUser = generateToken({ id: user.id });
+
     res.status(200).json({ tokenUser });
   } catch (error) {
     res.status(500).json({ message: "Error al iniciar sesion" });

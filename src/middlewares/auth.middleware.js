@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+const { verifyToken } = require("../utils/jwt");
 
 function authMiddleware(req, res, next) {
   try {
@@ -6,8 +6,11 @@ function authMiddleware(req, res, next) {
     if (!authHeader) {
       return res.status(401).json({ message: "Acceso no autorizado" });
     }
+    if (!authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Formato de token no valido" });
+    }
     const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = verifyToken(token);
     req.userId = decoded.id;
     next();
   } catch (error) {
