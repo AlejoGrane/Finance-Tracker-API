@@ -70,9 +70,10 @@ async function createInvestment(req, res) {
       category,
       returnRate,
       startDate,
-      endDate,
-      description,
+      endDate ?? null,
+      description ?? null,
     );
+
     res.status(201).json({ newInvestmentId });
   } catch (error) {
     res.status(500).json({ message: "Error al crear la inversion" });
@@ -87,11 +88,10 @@ async function getInvestmentByUser(req, res) {
 
     res.status(200).json({ userInvestmentByUser });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar el ahorro" });
+    res.status(500).json({ message: "Error al buscar la inversion" });
   }
 }
 
-// FUNCION PARA FILTRAR INVERSIONES POR CATEGORIA
 async function getInvestmentByCategory(req, res) {
   try {
     const userId = req.userId;
@@ -119,6 +119,13 @@ async function getInvestmentByDate(req, res) {
     const userId = req.userId;
     const { filter, startDate, endDate } = req.query;
     const validFilters = ["week", "month", "3months"];
+
+    if (!filter && !(startDate && endDate)) {
+      return res.status(400).json({
+        message:
+          "Debe enviar un filtro (week, month, 3months) o un rango de fechas (startDate y endDate)",
+      });
+    }
 
     if (filter && !validFilters.includes(filter)) {
       return res
@@ -171,6 +178,19 @@ async function updateInvestment(req, res) {
     const userId = req.userId;
     const { id } = req.params;
 
+    if (
+      amount === undefined &&
+      category === undefined &&
+      returnRate === undefined &&
+      startDate === undefined &&
+      endDate === undefined &&
+      description === undefined
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Debe enviar al menos un campo para actualizar" });
+    }
+
     if (amount !== undefined && (isNaN(amount) || amount <= 0)) {
       return res.status(400).json({
         message:
@@ -192,7 +212,7 @@ async function updateInvestment(req, res) {
     if (startDate !== undefined && (!startDate || !isValidDate(startDate))) {
       return res.status(400).json({
         message:
-          "Error al actualizar la inversion, ingrese una fecha de inicio valida valida. (YYYY-MM-DD)",
+          "Error al actualizar la inversion, ingrese una fecha de inicio valida. (YYYY-MM-DD)",
       });
     }
     if (endDate !== undefined && (!endDate || !isValidDate(endDate))) {

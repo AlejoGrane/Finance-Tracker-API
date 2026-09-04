@@ -31,7 +31,7 @@ async function createSaving(req, res) {
       userId,
       amount,
       category,
-      description,
+      description ?? null,
     );
     res.status(201).json({ newSavingId });
   } catch (error) {
@@ -69,7 +69,7 @@ async function getSavingByCategory(req, res) {
 
     res.status(200).json({ userSavingByCategory });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar los gastos" });
+    res.status(500).json({ message: "Error al buscar los ahorros" });
   }
 }
 
@@ -78,6 +78,16 @@ async function updateSaving(req, res) {
     const { amount, category, description } = req.body;
     const userId = req.userId;
     const { id } = req.params;
+
+    if (
+      amount === undefined &&
+      category === undefined &&
+      description === undefined
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Debe enviar al menos un campo para actualizar" });
+    }
 
     if (amount !== undefined && (isNaN(amount) || amount <= 0)) {
       return res.status(400).json({

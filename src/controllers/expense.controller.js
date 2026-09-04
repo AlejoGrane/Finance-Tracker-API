@@ -48,7 +48,7 @@ async function createExpense(req, res) {
       userId,
       amount,
       category,
-      description,
+      description ?? null,
       date,
     );
     res.status(201).json({ newExpenseId });
@@ -96,7 +96,7 @@ async function getExpensesByDate(req, res) {
     const userId = req.userId;
     const { date } = req.query;
 
-    const userExpensesByDate = await getInvestmentByDateInDb(userId, date);
+    const userExpensesByDate = await getExpensesByDateInDb(userId, date);
     res.status(200).json({ userExpensesByDate });
   } catch (error) {
     res.status(500).json({ message: "Error al buscar los gastos" });
@@ -108,6 +108,17 @@ async function updateExpenses(req, res) {
     const { amount, category, description, date } = req.body;
     const userId = req.userId;
     const { id } = req.params;
+
+    if (
+      amount === undefined &&
+      category === undefined &&
+      description === undefined &&
+      date === undefined
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Debe enviar al menos un campo para actualizar" });
+    }
 
     if (amount !== undefined && (isNaN(amount) || amount < 0)) {
       return res.status(400).json({
