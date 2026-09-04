@@ -8,15 +8,26 @@ async function createExpense(userId, amount, category, description, date) {
   return result.insertId;
 }
 
-async function getExpensesByUser(userId, startDate, endDate) {
-  let query = "SELECT * FROM expenses WHERE user_id = ?";
-  const params = [userId];
+async function getExpensesByUser(userId) {
+  const [rows] = await pool.query("SELECT * FROM expenses WHERE user_id = ?", [
+    userId,
+  ]);
+  return rows;
+}
 
-  if (startDate && endDate) {
-    query += " AND date BETWEEN ? AND ?";
-    params.push(startDate, endDate);
-  }
-  const [rows] = await pool.query(query, params);
+async function getExpensesByCategory(userId, category) {
+  const [rows] = await pool.query(
+    "SELECT * FROM expenses WHERE user_id = ? AND category = ?",
+    [userId, category],
+  );
+  return rows;
+}
+
+async function getExpensesByDate(userId, date) {
+  const [rows] = await pool.query(
+    "SELECT * FROM expenses WHERE user_id = ? AND date = ?",
+    [userId, date],
+  );
   return rows;
 }
 
@@ -59,6 +70,8 @@ async function deleteExpenses(id, userId) {
 module.exports = {
   createExpense,
   getExpensesByUser,
+  getExpensesByCategory,
+  getExpensesByDate,
   updateExpenses,
   deleteExpenses,
 };

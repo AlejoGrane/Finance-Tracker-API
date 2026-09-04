@@ -1,9 +1,12 @@
 const {
   createExpense: createExpenseInDb,
-  getExpensesByUser,
+  getExpensesByUser: getExpensesByUserInDb,
+  getExpensesByCategory: getExpensesByCategoryInDb,
+  getExpensesByDate: getExpensesByDateInDb,
   updateExpenses: updateExpensesInDb,
   deleteExpenses: deleteExpensesInDb,
 } = require("../models/expense.model");
+const { isValidDate } = require("../utils/validators");
 
 const CATEGORIES = [
   "Groceries",
@@ -14,13 +17,6 @@ const CATEGORIES = [
   "Health",
   "Others",
 ];
-
-function isValidDate(dateString) {
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-  if (!regex.test(dateString)) return false;
-  const date = new Date(dateString);
-  return !isNaN(date.getTime());
-}
 
 async function createExpense(req, res) {
   try {
@@ -61,69 +57,47 @@ async function createExpense(req, res) {
   }
 }
 
-function calculateDateRange(filter) {
-  const today = new Date();
-  const end = today.toISOString().split("T")[0];
-  let start;
-
-  if (filter === "week") {
-    const pastDate = new Date();
-    pastDate.setDate(today.getDate() - 7);
-    start = pastDate.toISOString().split("T")[0];
-  } else if (filter === "month") {
-    const pastDate = new Date();
-    pastDate.setMonth(today.getMonth() - 1);
-    start = pastDate.toISOString().split("T")[0];
-  } else if (filter === "3months") {
-    const pastDate = new Date();
-    pastDate.setMonth(today.getMonth() - 3);
-    start = pastDate.toISOString().split("T")[0];
-  }
-
-  return { start, end };
-}
-
-async function getExpenses(req, res) {
+async function getExpensesByUser(req, res) {
   try {
     const userId = req.userId;
-    const { filter, startDate, endDate } = req.query;
-    const validFilters = ["week", "month", "3months"];
 
-    if (filter && !validFilters.includes(filter)) {
-      return res
-        .status(400)
-        .json({ message: "Ingrese un filtro valido. (week, month, 3 months)" });
-    }
-    if (startDate && !isValidDate(startDate)) {
-      return res
-        .status(400)
-        .json({ message: "Ingrese una fecha de inicio valida. (YYYY/MM/DD)" });
-    }
-    if (endDate && !isValidDate(endDate)) {
+    const userExpensesByUser = await getExpensesByUserInDb(userId);
+
+    res.status(200).json({ userExpensesByUser });
+  } catch (error) {
+    res.status(500).json({ message: "Error al buscar el gasto" });
+  }
+}
+
+async function getExpensesByCategory(req, res) {
+  try {
+    const userId = req.userId;
+    const { category } = req.query;
+
+    if (!CATEGORIES.includes(category)) {
       return res.status(400).json({
-        message: "Ingrese una fecha de finalizacion valida. (YYYY/MM/DD)",
-      });
-    }
-    if (startDate && endDate && startDate > endDate) {
-      return res.status(400).json({
-        message:
-          "La fecha de finalizacion no puede ser posterior a la fecha de inicio",
+        message: "Error al buscar el gasto, ingrese una categoria valida",
       });
     }
 
-    let start, end;
+    const userExpensesByCategory = await getExpensesByCategoryInDb(
+      userId,
+      category,
+    );
 
-    if (filter) {
-      const range = calculateDateRange(filter);
-      start = range.start;
-      end = range.end;
-    } else if (startDate && endDate) {
-      start = startDate;
-      end = endDate;
-    }
+    res.status(200).json({ userExpensesByCategory });
+  } catch (error) {
+    res.status(500).json({ message: "Error al buscar los gastos" });
+  }
+}
 
-    const userExpenses = await getExpensesByUser(userId, start, end);
-    res.status(200).json({ userExpenses });
+async function getExpensesByDate(req, res) {
+  try {
+    const userId = req.userId;
+    const { date } = req.query;
+
+    const userExpensesByDate = await getInvestmentByDateInDb(userId, date);
+    res.status(200).json({ userExpensesByDate });
   } catch (error) {
     res.status(500).json({ message: "Error al buscar los gastos" });
   }
@@ -191,4 +165,11 @@ async function deleteExpenses(req, res) {
   }
 }
 
-module.exports = { createExpense, getExpenses, updateExpenses, deleteExpenses };
+module.exports = {
+  createExpense,
+  getExpensesByUser,
+  getExpensesByCategory,
+  getExpensesByDate,
+  updateExpenses,
+  deleteExpenses,
+};
