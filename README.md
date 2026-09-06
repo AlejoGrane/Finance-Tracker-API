@@ -10,6 +10,7 @@ Proyecto backend basado en el [Expense Tracker API](https://roadmap.sh/projects/
 - **Framework:** Express 5
 - **Base de datos:** MySQL (via `mysql2`, con connection pooling)
 - **Autenticación:** JWT (`jsonwebtoken`) + hashing de passwords (`bcrypt`)
+- **Contenedores:** Docker + Docker Compose
 - **Dev tooling:** `nodemon`, `dotenv`
 
 ## Arquitectura
@@ -30,14 +31,57 @@ Cada request pasa por: `routes → middleware de auth → controller → model �
 
 ## Instalación
 
-### Requisitos
+Hay dos formas de correr el proyecto: con **Docker** (recomendado, no requiere instalar MySQL localmente) o de forma **manual**.
 
-- Node.js 18 o superior
-- MySQL corriendo localmente (o accesible por red)
+### Opción A — Con Docker
 
-### Pasos
+**Requisitos:** Docker Desktop instalado y corriendo.
 
 1. Cloná el repositorio:
+
+   ```bash
+   git clone https://github.com/AlejoGrane/finance-tracker-api.git
+   cd finance-tracker-api
+   ```
+
+2. Copiá `.env.example` a `.env` y completá los valores (`DB_PASSWORD` y `JWT_SECRET` como mínimo):
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Levantá los contenedores:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+   Esto levanta dos contenedores: la API y MySQL. La base de datos se inicializa automáticamente con las tablas definidas en `database/schema.sql` la primera vez que se crea.
+
+4. La API queda disponible en `http://localhost:3000`.
+
+Para detener los contenedores:
+
+```bash
+docker-compose down
+```
+
+Para detenerlos y borrar también los datos de la base (reiniciar todo desde cero):
+
+```bash
+docker-compose down -v
+```
+
+### Opción B — Instalación manual
+
+**Requisitos:**
+
+- Node.js 18 o superior (probado con Node 24)
+- MySQL corriendo localmente (o accesible por red)
+
+**Pasos:**
+
+1. Cloná el repositorio y entrá a la carpeta:
 
    ```bash
    git clone https://github.com/AlejoGrane/finance-tracker-api.git
@@ -67,7 +111,7 @@ Cada request pasa por: `routes → middleware de auth → controller → model �
    | Variable      | Descripción                                                            |
    | ------------- | ---------------------------------------------------------------------- |
    | `PORT`        | Puerto donde corre el servidor (default: 3000)                         |
-   | `DB_HOST`     | Host de MySQL                                                          |
+   | `DB_HOST`     | Host de MySQL (`localhost` en instalación manual)                      |
    | `DB_USER`     | Usuario de MySQL                                                       |
    | `DB_PASSWORD` | Password de MySQL                                                      |
    | `DB_NAME`     | Nombre de la base de datos                                             |
