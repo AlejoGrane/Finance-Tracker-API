@@ -1,12 +1,12 @@
 const {
-  createSaving: createSavingInDb,
+  createSavings: createSavingsInDb,
   getSavingByUser: getSavingByUserInDb,
   getSavingByCategory: getSavingByCategoryInDb,
-  updateSaving: updateSavingInDb,
-  deleteSaving: deleteSavingInDb,
+  updateSavings: updateSavingsInDb,
+  deleteSavings: deleteSavingsInDb,
 } = require("../models/saving.model");
 
-async function createSaving(req, res) {
+async function createSavings(req, res) {
   try {
     const { amount, category, description } = req.body;
     const userId = req.userId;
@@ -27,7 +27,7 @@ async function createSaving(req, res) {
       });
     }
 
-    const newSavingId = await createSavingInDb(
+    const newSavingId = await createSavingsInDb(
       userId,
       amount,
       category,
@@ -73,7 +73,7 @@ async function getSavingByCategory(req, res) {
   }
 }
 
-async function updateSaving(req, res) {
+async function updateSavings(req, res) {
   try {
     const { amount, category, description } = req.body;
     const userId = req.userId;
@@ -106,7 +106,7 @@ async function updateSaving(req, res) {
       });
     }
 
-    const updatedRow = await updateSavingInDb(
+    const updatedRow = await updateSavingsInDb(
       amount,
       category,
       description,
@@ -125,11 +125,11 @@ async function updateSaving(req, res) {
   }
 }
 
-async function deleteSaving(req, res) {
+async function deleteSavings(req, res) {
   try {
     const { id } = req.params;
     const userId = req.userId;
-    const deletedRow = await deleteSavingInDb(id, userId);
+    const deletedRow = await deleteSavingsInDb(id, userId);
     if (deletedRow === 0) {
       return res.status(404).json({ message: "Ahorro no encontrado" });
     }
@@ -140,9 +140,9 @@ async function deleteSaving(req, res) {
 }
 
 module.exports = {
-  createSaving,
+  createSavings,
   getSavingByUser,
   getSavingByCategory,
-  updateSaving,
-  deleteSaving,
+  updateSavings,
+  deleteSavings,
 };

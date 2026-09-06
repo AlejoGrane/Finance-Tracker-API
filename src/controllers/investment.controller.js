@@ -1,10 +1,10 @@
 const {
-  createInvestment: createInvestmentInDb,
+  createInvestments: createInvestmentsInDb,
   getInvestmentByUser: getInvestmentByUserInDb,
   getInvestmentByCategory: getInvestmentByCategoryInDb,
   getInvestmentByDate: getInvestmentByDateInDb,
-  updateInvestment: updateInvestmentInDb,
-  deleteInvestment: deleteInvestmentInDb,
+  updateInvestments: updateInvestmentsInDb,
+  deleteInvestments: deleteInvestmentsInDb,
 } = require("../models/investment.model");
 const { isValidDate, calculateDateRange } = require("../utils/validators");
 
@@ -18,7 +18,7 @@ const CATEGORIES = [
   "Others",
 ];
 
-async function createInvestment(req, res) {
+async function createInvestments(req, res) {
   try {
     const { amount, category, returnRate, startDate, endDate, description } =
       req.body;
@@ -64,7 +64,7 @@ async function createInvestment(req, res) {
       });
     }
 
-    const newInvestmentId = await createInvestmentInDb(
+    const newInvestmentId = await createInvestmentsInDb(
       userId,
       amount,
       category,
@@ -171,7 +171,7 @@ async function getInvestmentByDate(req, res) {
   }
 }
 
-async function updateInvestment(req, res) {
+async function updateInvestments(req, res) {
   try {
     const { amount, category, returnRate, startDate, endDate, description } =
       req.body;
@@ -238,7 +238,7 @@ async function updateInvestment(req, res) {
       });
     }
 
-    const updatedRow = await updateInvestmentInDb(
+    const updatedRow = await updateInvestmentsInDb(
       amount,
       category,
       returnRate,
@@ -260,11 +260,11 @@ async function updateInvestment(req, res) {
   }
 }
 
-async function deleteInvestment(req, res) {
+async function deleteInvestments(req, res) {
   try {
     const { id } = req.params;
     const userId = req.userId;
-    const deletedRow = await deleteInvestmentInDb(id, userId);
+    const deletedRow = await deleteInvestmentsInDb(id, userId);
     if (deletedRow === 0) {
       return res.status(404).json({ message: "Inversion no encontrada" });
     }
@@ -275,10 +275,10 @@ async function deleteInvestment(req, res) {
 }
 
 module.exports = {
-  createInvestment,
+  createInvestments,
   getInvestmentByUser,
   getInvestmentByCategory,
   getInvestmentByDate,
-  updateInvestment,
-  deleteInvestment,
+  updateInvestments,
+  deleteInvestments,
 };

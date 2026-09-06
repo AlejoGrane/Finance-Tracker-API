@@ -1,18 +1,18 @@
 const express = require("express");
 const {
-  createSaving,
+  createSavings,
   getSavingByUser,
   getSavingByCategory,
-  updateSaving,
-  deleteSaving,
+  updateSavings,
+  deleteSavings,
 } = require("../controllers/saving.controller");
 const authMiddleware = require("../middlewares/auth.middleware");
 const router = express.Router();
 
-router.post("/", authMiddleware, createSaving);
+router.post("/", authMiddleware, createSavings);
 router.get("/", authMiddleware, getSavingByUser);
 router.get("/category", authMiddleware, getSavingByCategory);
-router.patch("/:id", authMiddleware, updateSaving);
-router.delete("/:id", authMiddleware, deleteSaving);
+router.patch("/:id", authMiddleware, updateSavings);
+router.delete("/:id", authMiddleware, deleteSavings);
 
 module.exports = router;

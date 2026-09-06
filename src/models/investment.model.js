@@ -1,6 +1,6 @@
 const pool = require("../config/db");
 
-async function createInvestment(
+async function createInvestments(
   userId,
   amount,
   category,
@@ -40,7 +40,7 @@ async function getInvestmentByDate(userId, startDate, endDate) {
   return rows;
 }
 
-async function updateInvestment(
+async function updateInvestments(
   amount,
   category,
   returnRate,
@@ -85,7 +85,7 @@ async function updateInvestment(
   return result.affectedRows;
 }
 
-async function deleteInvestment(id, userId) {
+async function deleteInvestments(id, userId) {
   const [result] = await pool.query(
     "DELETE FROM investments WHERE id = ? AND user_id = ?",
     [id, userId],
@@ -94,10 +94,10 @@ async function deleteInvestment(id, userId) {
 }
 
 module.exports = {
-  createInvestment,
+  createInvestments,
   getInvestmentByUser,
   getInvestmentByCategory,
   getInvestmentByDate,
-  updateInvestment,
-  deleteInvestment,
+  updateInvestments,
+  deleteInvestments,
 };

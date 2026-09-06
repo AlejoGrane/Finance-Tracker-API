@@ -1,5 +1,5 @@
 const {
-  createExpense: createExpenseInDb,
+  createExpenses: createExpensesInDb,
   getExpensesByUser: getExpensesByUserInDb,
   getExpensesByCategory: getExpensesByCategoryInDb,
   getExpensesByDate: getExpensesByDateInDb,
@@ -18,7 +18,7 @@ const CATEGORIES = [
   "Others",
 ];
 
-async function createExpense(req, res) {
+async function createExpenses(req, res) {
   try {
     const { amount, category, description, date } = req.body;
     const userId = req.userId;
@@ -44,7 +44,7 @@ async function createExpense(req, res) {
       });
     }
 
-    const newExpenseId = await createExpenseInDb(
+    const newExpenseId = await createExpensesInDb(
       userId,
       amount,
       category,
@@ -177,7 +177,7 @@ async function deleteExpenses(req, res) {
 }
 
 module.exports = {
-  createExpense,
+  createExpenses,
   getExpensesByUser,
   getExpensesByCategory,
   getExpensesByDate,

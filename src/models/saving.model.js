@@ -1,6 +1,6 @@
 const pool = require("../config/db");
 
-async function createSaving(userId, amount, category, description) {
+async function createSavings(userId, amount, category, description) {
   const [result] = await pool.query(
     "INSERT INTO savings (user_id, amount, category, description) VALUES (?, ?, ?, ?)",
     [userId, amount, category, description],
@@ -23,7 +23,7 @@ async function getSavingByCategory(userId, category) {
   return rows;
 }
 
-async function updateSaving(amount, category, description, id, userId) {
+async function updateSavings(amount, category, description, id, userId) {
   const fields = [];
   const params = [];
 
@@ -47,7 +47,7 @@ async function updateSaving(amount, category, description, id, userId) {
   return result.affectedRows;
 }
 
-async function deleteSaving(id, userId) {
+async function deleteSavings(id, userId) {
   const [result] = await pool.query(
     "DELETE FROM savings WHERE id = ? AND user_id = ?",
     [id, userId],
@@ -56,9 +56,9 @@ async function deleteSaving(id, userId) {
 }
 
 module.exports = {
-  createSaving,
+  createSavings,
   getSavingByUser,
   getSavingByCategory,
-  updateSaving,
-  deleteSaving,
+  updateSavings,
+  deleteSavings,
 };

@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  createExpense,
+  createExpenses,
   getExpensesByUser,
   getExpensesByCategory,
   getExpensesByDate,
@@ -10,7 +10,7 @@ const {
 const authMiddleware = require("../middlewares/auth.middleware");
 const router = express.Router();
 
-router.post("/", authMiddleware, createExpense);
+router.post("/", authMiddleware, createExpenses);
 router.get("/", authMiddleware, getExpensesByUser);
 router.get("/category", authMiddleware, getExpensesByCategory);
 router.get("/date", authMiddleware, getExpensesByDate);
