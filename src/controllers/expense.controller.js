@@ -25,22 +25,22 @@ async function createExpenses(req, res) {
 
     if (isNaN(amount) || amount < 0) {
       return res.status(400).json({
-        message: "Error al crear el gasto, ingrese una cantidad valida",
+        message: "Error creating expense, enter a valid amount",
       });
     }
     if (!CATEGORIES.includes(category)) {
       return res.status(400).json({
-        message: "Error al crear el gasto, ingrese una categoria valida",
+        message: "Error creating expense, enter a valid category",
       });
     }
     if (description && typeof description !== "string") {
       return res.status(400).json({
-        message: "Error al crear el gasto, ingrese una descripcion valida",
+        message: "Error creating expense, enter a valid description",
       });
     }
     if (!date || !isValidDate(date)) {
       return res.status(400).json({
-        message: "Ingrese una fecha valida. (YYYY-MM-DD)",
+        message: "Enter a valid date. (YYYY-MM-DD)",
       });
     }
 
@@ -53,7 +53,7 @@ async function createExpenses(req, res) {
     );
     res.status(201).json({ newExpenseId });
   } catch (error) {
-    res.status(500).json({ message: "Error al crear el gasto" });
+    res.status(500).json({ message: "Error creating expense" });
   }
 }
 
@@ -65,7 +65,7 @@ async function getExpensesByUser(req, res) {
 
     res.status(200).json({ userExpensesByUser });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar el gasto" });
+    res.status(500).json({ message: "Error fetching expense" });
   }
 }
 
@@ -76,7 +76,7 @@ async function getExpensesByCategory(req, res) {
 
     if (!CATEGORIES.includes(category)) {
       return res.status(400).json({
-        message: "Error al buscar el gasto, ingrese una categoria valida",
+        message: "Error fetching expense, enter a valid category",
       });
     }
 
@@ -87,7 +87,7 @@ async function getExpensesByCategory(req, res) {
 
     res.status(200).json({ userExpensesByCategory });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar los gastos" });
+    res.status(500).json({ message: "Error fetching expenses" });
   }
 }
 
@@ -99,7 +99,7 @@ async function getExpensesByDate(req, res) {
     const userExpensesByDate = await getExpensesByDateInDb(userId, date);
     res.status(200).json({ userExpensesByDate });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar los gastos" });
+    res.status(500).json({ message: "Error fetching expenses" });
   }
 }
 
@@ -117,28 +117,28 @@ async function updateExpenses(req, res) {
     ) {
       return res
         .status(400)
-        .json({ message: "Debe enviar al menos un campo para actualizar" });
+        .json({ message: "Must provide at least one field to update" });
     }
 
     if (amount !== undefined && (isNaN(amount) || amount < 0)) {
       return res.status(400).json({
-        message: "Error al actualizar el gasto, ingrese una cantidad valida",
+        message: "Error updating expense, enter a valid amount",
       });
     }
     if (category !== undefined && !CATEGORIES.includes(category)) {
       return res.status(400).json({
-        message: "Error al actualizar el gasto, ingrese una categoria valida",
+        message: "Error updating expense, enter a valid category",
       });
     }
     if (description !== undefined && typeof description !== "string") {
       return res.status(400).json({
-        message: "Error al actualizar el gasto, ingrese una descripcion valida",
+        message: "Error updating expense, enter a valid description",
       });
     }
     if (date !== undefined && !isValidDate(date)) {
       return res.status(400).json({
         message:
-          "Error al actualizar el gasto, ingrese una fecha valida. (YYYY-MM-DD)",
+          "Error updating expense, enter a valid date. (YYYY-MM-DD)",
       });
     }
 
@@ -152,13 +152,13 @@ async function updateExpenses(req, res) {
     );
 
     if (updatedRow === 0) {
-      return res.status(404).json({ message: "Gasto no encontrado" });
+      return res.status(404).json({ message: "Expense not found" });
     }
     res
       .status(200)
-      .json({ message: `Se han actualizado: ${updatedRow} filas` });
+      .json({ message: `Updated: ${updatedRow} rows` });
   } catch (error) {
-    res.status(500).json({ message: "Error al actualizar el gasto" });
+    res.status(500).json({ message: "Error updating expense" });
   }
 }
 
@@ -168,11 +168,11 @@ async function deleteExpenses(req, res) {
     const userId = req.userId;
     const deletedRow = await deleteExpensesInDb(id, userId);
     if (deletedRow === 0) {
-      return res.status(404).json({ message: "Gasto no encontrado" });
+      return res.status(404).json({ message: "Expense not found" });
     }
-    res.status(200).json({ message: `Se han borrado: ${deletedRow} filas` });
+    res.status(200).json({ message: `Deleted: ${deletedRow} rows` });
   } catch (error) {
-    res.status(500).json({ message: "Error al borrar el gasto" });
+    res.status(500).json({ message: "Error deleting expense" });
   }
 }
 

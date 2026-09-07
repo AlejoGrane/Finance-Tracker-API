@@ -26,41 +26,41 @@ async function createInvestments(req, res) {
 
     if (isNaN(amount) || amount <= 0) {
       return res.status(400).json({
-        message: "Error al crear la inversion, ingrese una cantidad valida",
+        message: "Error creating investment, enter a valid amount",
       });
     }
     if (!CATEGORIES.includes(category)) {
       return res.status(400).json({
-        message: "Error al crear la inversion, ingrese una categoria valida",
+        message: "Error creating investment, enter a valid category",
       });
     }
     if (isNaN(returnRate) || returnRate <= 0) {
       return res.status(400).json({
         message:
-          "Error al crear la inversion, ingrese un porcentaje de ganancia valido",
+          "Error creating investment, enter a valid return rate",
       });
     }
     if (!startDate || !isValidDate(startDate)) {
       return res.status(400).json({
         message:
-          "Error al crear la inversion, ingrese una fecha de inicio valida valida. (YYYY-MM-DD)",
+          "Error creating investment, enter a valid start date. (YYYY-MM-DD)",
       });
     }
     if (endDate !== undefined && !isValidDate(endDate)) {
       return res.status(400).json({
         message:
-          "Error al crear la inversion, ingrese una fecha de finalizacion valida. (YYYY-MM-DD)",
+          "Error creating investment, enter a valid end date. (YYYY-MM-DD)",
       });
     }
     if (startDate && endDate && startDate > endDate) {
       return res.status(400).json({
         message:
-          "La fecha de inicio no puede ser posterior a la fecha de finalizacion",
+          "Start date cannot be after end date",
       });
     }
     if (description && typeof description !== "string") {
       return res.status(400).json({
-        message: "Error al crear la inversion, ingrese una descripcion valida",
+        message: "Error creating investment, enter a valid description",
       });
     }
 
@@ -76,7 +76,7 @@ async function createInvestments(req, res) {
 
     res.status(201).json({ newInvestmentId });
   } catch (error) {
-    res.status(500).json({ message: "Error al crear la inversion" });
+    res.status(500).json({ message: "Error creating investment" });
   }
 }
 
@@ -88,7 +88,7 @@ async function getInvestmentByUser(req, res) {
 
     res.status(200).json({ userInvestmentByUser });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar la inversion" });
+    res.status(500).json({ message: "Error fetching investment" });
   }
 }
 
@@ -99,7 +99,7 @@ async function getInvestmentByCategory(req, res) {
 
     if (!CATEGORIES.includes(category)) {
       return res.status(400).json({
-        message: "Error al buscar la inversion, ingrese una categoria valida",
+        message: "Error fetching investment, enter a valid category",
       });
     }
 
@@ -110,7 +110,7 @@ async function getInvestmentByCategory(req, res) {
 
     res.status(200).json({ userInvestmentByCategory });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar las inversiones" });
+    res.status(500).json({ message: "Error fetching investments" });
   }
 }
 
@@ -123,29 +123,29 @@ async function getInvestmentByDate(req, res) {
     if (!filter && !(startDate && endDate)) {
       return res.status(400).json({
         message:
-          "Debe enviar un filtro (week, month, 3months) o un rango de fechas (startDate y endDate)",
+          "Must provide a filter (week, month, 3months) or a date range (startDate and endDate)",
       });
     }
 
     if (filter && !validFilters.includes(filter)) {
       return res
         .status(400)
-        .json({ message: "Ingrese un filtro valido. (week, month, 3months)" });
+        .json({ message: "Enter a valid filter. (week, month, 3months)" });
     }
     if (startDate && !isValidDate(startDate)) {
       return res
         .status(400)
-        .json({ message: "Ingrese una fecha de inicio valida. (YYYY-MM-DD)" });
+        .json({ message: "Enter a valid start date. (YYYY-MM-DD)" });
     }
     if (endDate && !isValidDate(endDate)) {
       return res.status(400).json({
-        message: "Ingrese una fecha de finalizacion valida. (YYYY-MM-DD)",
+        message: "Enter a valid end date. (YYYY-MM-DD)",
       });
     }
     if (startDate && endDate && startDate > endDate) {
       return res.status(400).json({
         message:
-          "La fecha de inicio no puede ser posterior a la de finalizacion",
+          "Start date cannot be after end date",
       });
     }
 
@@ -167,7 +167,7 @@ async function getInvestmentByDate(req, res) {
     );
     res.status(200).json({ userInvestmentByDate });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar las inversiones" });
+    res.status(500).json({ message: "Error fetching investments" });
   }
 }
 
@@ -188,37 +188,37 @@ async function updateInvestments(req, res) {
     ) {
       return res
         .status(400)
-        .json({ message: "Debe enviar al menos un campo para actualizar" });
+        .json({ message: "Must provide at least one field to update" });
     }
 
     if (amount !== undefined && (isNaN(amount) || amount <= 0)) {
       return res.status(400).json({
         message:
-          "Error al actualizar la inversion, ingrese una cantidad valida",
+          "Error updating investment, enter a valid amount",
       });
     }
     if (category !== undefined && !CATEGORIES.includes(category)) {
       return res.status(400).json({
         message:
-          "Error al actualizar la inversion, ingrese una categoria valida",
+          "Error updating investment, enter a valid category",
       });
     }
     if (returnRate !== undefined && (isNaN(returnRate) || returnRate <= 0)) {
       return res.status(400).json({
         message:
-          "Error al actualizar la inversion, ingrese un porcentaje de ganancia valido",
+          "Error updating investment, enter a valid return rate",
       });
     }
     if (startDate !== undefined && (!startDate || !isValidDate(startDate))) {
       return res.status(400).json({
         message:
-          "Error al actualizar la inversion, ingrese una fecha de inicio valida. (YYYY-MM-DD)",
+          "Error updating investment, enter a valid start date. (YYYY-MM-DD)",
       });
     }
     if (endDate !== undefined && (!endDate || !isValidDate(endDate))) {
       return res.status(400).json({
         message:
-          "Error al actualizar la inversion, ingrese una fecha de finalizacion valida. (YYYY-MM-DD)",
+          "Error updating investment, enter a valid end date. (YYYY-MM-DD)",
       });
     }
     if (
@@ -228,13 +228,13 @@ async function updateInvestments(req, res) {
     ) {
       return res.status(400).json({
         message:
-          "La fecha de inicio no puede ser posterior a la fecha de finalizacion",
+          "Start date cannot be after end date",
       });
     }
     if (description && typeof description !== "string") {
       return res.status(400).json({
         message:
-          "Error al actualizar la inversion, ingrese una descripcion valida",
+          "Error updating investment, enter a valid description",
       });
     }
 
@@ -250,13 +250,13 @@ async function updateInvestments(req, res) {
     );
 
     if (updatedRow === 0) {
-      return res.status(404).json({ message: "Inversion no encontrada" });
+      return res.status(404).json({ message: "Investment not found" });
     }
     res
       .status(200)
-      .json({ message: `Se han actualizado: ${updatedRow} filas` });
+      .json({ message: `Updated: ${updatedRow} rows` });
   } catch (error) {
-    res.status(500).json({ message: "Error al actualizar la inversion" });
+    res.status(500).json({ message: "Error updating investment" });
   }
 }
 
@@ -266,11 +266,11 @@ async function deleteInvestments(req, res) {
     const userId = req.userId;
     const deletedRow = await deleteInvestmentsInDb(id, userId);
     if (deletedRow === 0) {
-      return res.status(404).json({ message: "Inversion no encontrada" });
+      return res.status(404).json({ message: "Investment not found" });
     }
-    res.status(200).json({ message: `Se han borrado: ${deletedRow} filas` });
+    res.status(200).json({ message: `Deleted: ${deletedRow} rows` });
   } catch (error) {
-    res.status(500).json({ message: "Error al borrar la inversion" });
+    res.status(500).json({ message: "Error deleting investment" });
   }
 }
 

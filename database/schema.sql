@@ -2,7 +2,7 @@
 CREATE DATABASE IF NOT EXISTS finance_tracker;
 USE finance_tracker;
 
--- Usuarios
+-- Users
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -10,7 +10,7 @@ CREATE TABLE users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Gastos
+-- Expenses
 CREATE TABLE expenses (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE expenses (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Ahorros
+-- Savings
 CREATE TABLE savings (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE savings (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Inversiones
+-- Investments
 CREATE TABLE investments (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,

@@ -13,17 +13,17 @@ async function createSavings(req, res) {
 
     if (isNaN(amount) || amount <= 0) {
       return res.status(400).json({
-        message: "Error al crear el ahorro, ingrese una cantidad valida",
+        message: "Error creating saving, enter a valid amount",
       });
     }
     if (!category || typeof category !== "string") {
       return res.status(400).json({
-        message: "Error al crear el ahorro, ingrese una categoria valida",
+        message: "Error creating saving, enter a valid category",
       });
     }
     if (description && typeof description !== "string") {
       return res.status(400).json({
-        message: "Error al crear el ahorro, ingrese una descripcion valida",
+        message: "Error creating saving, enter a valid description",
       });
     }
 
@@ -35,7 +35,7 @@ async function createSavings(req, res) {
     );
     res.status(201).json({ newSavingId });
   } catch (error) {
-    res.status(500).json({ message: "Error al crear el ahorro" });
+    res.status(500).json({ message: "Error creating saving" });
   }
 }
 
@@ -47,7 +47,7 @@ async function getSavingByUser(req, res) {
 
     res.status(200).json({ userSavingByUser });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar el ahorro" });
+    res.status(500).json({ message: "Error fetching saving" });
   }
 }
 
@@ -58,7 +58,7 @@ async function getSavingByCategory(req, res) {
 
     if (!category || typeof category !== "string") {
       return res.status(400).json({
-        message: "Error al buscar el ahorro, ingrese una categoria valida",
+        message: "Error fetching saving, enter a valid category",
       });
     }
 
@@ -69,7 +69,7 @@ async function getSavingByCategory(req, res) {
 
     res.status(200).json({ userSavingByCategory });
   } catch (error) {
-    res.status(500).json({ message: "Error al buscar los ahorros" });
+    res.status(500).json({ message: "Error fetching savings" });
   }
 }
 
@@ -86,23 +86,23 @@ async function updateSavings(req, res) {
     ) {
       return res
         .status(400)
-        .json({ message: "Debe enviar al menos un campo para actualizar" });
+        .json({ message: "Must provide at least one field to update" });
     }
 
     if (amount !== undefined && (isNaN(amount) || amount <= 0)) {
       return res.status(400).json({
-        message: "Error al actualizar el ahorro, ingrese una cantidad valida",
+        message: "Error updating saving, enter a valid amount",
       });
     }
     if (category && typeof category !== "string") {
       return res.status(400).json({
-        message: "Error al actualizar el ahorro, ingrese una categoria valida",
+        message: "Error updating saving, enter a valid category",
       });
     }
     if (description && typeof description !== "string") {
       return res.status(400).json({
         message:
-          "Error al actualizar el ahorro, ingrese una descripcion valida",
+          "Error updating saving, enter a valid description",
       });
     }
 
@@ -115,13 +115,13 @@ async function updateSavings(req, res) {
     );
 
     if (updatedRow === 0) {
-      return res.status(404).json({ message: "Ahorro no encontrado" });
+      return res.status(404).json({ message: "Saving not found" });
     }
     res
       .status(200)
-      .json({ message: `Se han actualizado: ${updatedRow} filas` });
+      .json({ message: `Updated: ${updatedRow} rows` });
   } catch (error) {
-    res.status(500).json({ message: "Error al actualizar el ahorro" });
+    res.status(500).json({ message: "Error updating saving" });
   }
 }
 
@@ -131,11 +131,11 @@ async function deleteSavings(req, res) {
     const userId = req.userId;
     const deletedRow = await deleteSavingsInDb(id, userId);
     if (deletedRow === 0) {
-      return res.status(404).json({ message: "Ahorro no encontrado" });
+      return res.status(404).json({ message: "Saving not found" });
     }
-    res.status(200).json({ message: `Se han borrado: ${deletedRow} filas` });
+    res.status(200).json({ message: `Deleted: ${deletedRow} rows` });
   } catch (error) {
-    res.status(500).json({ message: "Error al borrar el ahorro" });
+    res.status(500).json({ message: "Error deleting saving" });
   }
 }
 

@@ -14,13 +14,13 @@ async function signup(req, res) {
     if (!isValidEmail(email)) {
       return res.status(400).json({
         message:
-          "Error al crear el nuevo usuario, ingrese un formato de email valido",
+          "Error creating user, enter a valid email format",
       });
     }
 
     if (await findUserByEmail(email)) {
       return res.status(409).json({
-        message: "Error al crear el nuevo usuario, correo ya existente",
+        message: "Error creating user, email already exists",
       });
     }
 
@@ -29,7 +29,7 @@ async function signup(req, res) {
 
     res.status(201).json({ newUserId, email });
   } catch (error) {
-    res.status(500).json({ message: "Error al crear el nuevo usuario" });
+    res.status(500).json({ message: "Error creating user" });
   }
 }
 
@@ -38,18 +38,18 @@ async function login(req, res) {
     const { email, password } = req.body;
     const user = await findUserByEmail(email);
     if (!user) {
-      return res.status(401).json({ message: "Credenciales invalidas" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      return res.status(401).json({ message: "Credenciales invalidas" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const tokenUser = generateToken({ id: user.id });
 
     res.status(200).json({ tokenUser });
   } catch (error) {
-    res.status(500).json({ message: "Error al iniciar sesion" });
+    res.status(500).json({ message: "Error logging in" });
   }
 }
 
