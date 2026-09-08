@@ -96,6 +96,12 @@ async function getExpensesByDate(req, res) {
     const userId = req.userId;
     const { date } = req.query;
 
+    if (!date || !isValidDate(date)) {
+      return res.status(400).json({
+        message: "Enter a valid date. (YYYY-MM-DD)",
+      });
+    }
+
     const userExpensesByDate = await getExpensesByDateInDb(userId, date);
     res.status(200).json({ userExpensesByDate });
   } catch (error) {
@@ -137,8 +143,7 @@ async function updateExpenses(req, res) {
     }
     if (date !== undefined && !isValidDate(date)) {
       return res.status(400).json({
-        message:
-          "Error updating expense, enter a valid date. (YYYY-MM-DD)",
+        message: "Error updating expense, enter a valid date. (YYYY-MM-DD)",
       });
     }
 
@@ -154,9 +159,7 @@ async function updateExpenses(req, res) {
     if (updatedRow === 0) {
       return res.status(404).json({ message: "Expense not found" });
     }
-    res
-      .status(200)
-      .json({ message: `Updated: ${updatedRow} rows` });
+    res.status(200).json({ message: `Updated: ${updatedRow} rows` });
   } catch (error) {
     res.status(500).json({ message: "Error updating expense" });
   }

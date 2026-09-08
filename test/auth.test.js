@@ -3,6 +3,7 @@ const app = require("../app");
 const pool = require("../src/config/db");
 
 beforeAll(async () => {
+  await pool.query("DELETE FROM expenses");
   await pool.query("DELETE FROM users");
 });
 
@@ -48,9 +49,7 @@ describe("POST /auth/login", () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("tokenUser");
   });
-});
 
-describe("POST /auth/login", () => {
   it("must login with wrong password and return 401", async () => {
     await request(app)
       .post("/auth/signup")
