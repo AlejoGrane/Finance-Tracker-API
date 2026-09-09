@@ -13,8 +13,7 @@ async function signup(req, res) {
 
     if (!isValidEmail(email)) {
       return res.status(400).json({
-        message:
-          "Error creating user, enter a valid email format",
+        message: "Error creating user, enter a valid email format",
       });
     }
 
@@ -29,6 +28,7 @@ async function signup(req, res) {
 
     res.status(201).json({ newUserId, email });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error creating user" });
   }
 }
