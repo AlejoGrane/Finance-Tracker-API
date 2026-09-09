@@ -36,8 +36,7 @@ async function createInvestments(req, res) {
     }
     if (isNaN(returnRate) || returnRate <= 0) {
       return res.status(400).json({
-        message:
-          "Error creating investment, enter a valid return rate",
+        message: "Error creating investment, enter a valid return rate",
       });
     }
     if (!startDate || !isValidDate(startDate)) {
@@ -54,8 +53,7 @@ async function createInvestments(req, res) {
     }
     if (startDate && endDate && startDate > endDate) {
       return res.status(400).json({
-        message:
-          "Start date cannot be after end date",
+        message: "Start date cannot be after end date",
       });
     }
     if (description && typeof description !== "string") {
@@ -76,6 +74,7 @@ async function createInvestments(req, res) {
 
     res.status(201).json({ newInvestmentId });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error creating investment" });
   }
 }
@@ -88,6 +87,7 @@ async function getInvestmentByUser(req, res) {
 
     res.status(200).json({ userInvestmentByUser });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error fetching investment" });
   }
 }
@@ -110,6 +110,7 @@ async function getInvestmentByCategory(req, res) {
 
     res.status(200).json({ userInvestmentByCategory });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error fetching investments" });
   }
 }
@@ -144,8 +145,7 @@ async function getInvestmentByDate(req, res) {
     }
     if (startDate && endDate && startDate > endDate) {
       return res.status(400).json({
-        message:
-          "Start date cannot be after end date",
+        message: "Start date cannot be after end date",
       });
     }
 
@@ -167,6 +167,7 @@ async function getInvestmentByDate(req, res) {
     );
     res.status(200).json({ userInvestmentByDate });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error fetching investments" });
   }
 }
@@ -193,20 +194,17 @@ async function updateInvestments(req, res) {
 
     if (amount !== undefined && (isNaN(amount) || amount <= 0)) {
       return res.status(400).json({
-        message:
-          "Error updating investment, enter a valid amount",
+        message: "Error updating investment, enter a valid amount",
       });
     }
     if (category !== undefined && !CATEGORIES.includes(category)) {
       return res.status(400).json({
-        message:
-          "Error updating investment, enter a valid category",
+        message: "Error updating investment, enter a valid category",
       });
     }
     if (returnRate !== undefined && (isNaN(returnRate) || returnRate <= 0)) {
       return res.status(400).json({
-        message:
-          "Error updating investment, enter a valid return rate",
+        message: "Error updating investment, enter a valid return rate",
       });
     }
     if (startDate !== undefined && (!startDate || !isValidDate(startDate))) {
@@ -227,14 +225,12 @@ async function updateInvestments(req, res) {
       startDate > endDate
     ) {
       return res.status(400).json({
-        message:
-          "Start date cannot be after end date",
+        message: "Start date cannot be after end date",
       });
     }
     if (description && typeof description !== "string") {
       return res.status(400).json({
-        message:
-          "Error updating investment, enter a valid description",
+        message: "Error updating investment, enter a valid description",
       });
     }
 
@@ -252,10 +248,9 @@ async function updateInvestments(req, res) {
     if (updatedRow === 0) {
       return res.status(404).json({ message: "Investment not found" });
     }
-    res
-      .status(200)
-      .json({ message: `Updated: ${updatedRow} rows` });
+    res.status(200).json({ message: `Updated: ${updatedRow} rows` });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error updating investment" });
   }
 }
@@ -270,6 +265,7 @@ async function deleteInvestments(req, res) {
     }
     res.status(200).json({ message: `Deleted: ${deletedRow} rows` });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error deleting investment" });
   }
 }

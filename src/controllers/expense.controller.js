@@ -53,6 +53,7 @@ async function createExpenses(req, res) {
     );
     res.status(201).json({ newExpenseId });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error creating expense" });
   }
 }
@@ -65,6 +66,7 @@ async function getExpensesByUser(req, res) {
 
     res.status(200).json({ userExpensesByUser });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error fetching expense" });
   }
 }
@@ -87,6 +89,7 @@ async function getExpensesByCategory(req, res) {
 
     res.status(200).json({ userExpensesByCategory });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error fetching expenses" });
   }
 }
@@ -105,6 +108,7 @@ async function getExpensesByDate(req, res) {
     const userExpensesByDate = await getExpensesByDateInDb(userId, date);
     res.status(200).json({ userExpensesByDate });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error fetching expenses" });
   }
 }
@@ -161,6 +165,7 @@ async function updateExpenses(req, res) {
     }
     res.status(200).json({ message: `Updated: ${updatedRow} rows` });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error updating expense" });
   }
 }
@@ -175,6 +180,7 @@ async function deleteExpenses(req, res) {
     }
     res.status(200).json({ message: `Deleted: ${deletedRow} rows` });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error deleting expense" });
   }
 }

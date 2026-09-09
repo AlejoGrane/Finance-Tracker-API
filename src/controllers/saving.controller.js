@@ -35,6 +35,7 @@ async function createSavings(req, res) {
     );
     res.status(201).json({ newSavingId });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error creating saving" });
   }
 }
@@ -47,6 +48,7 @@ async function getSavingByUser(req, res) {
 
     res.status(200).json({ userSavingByUser });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error fetching saving" });
   }
 }
@@ -69,6 +71,7 @@ async function getSavingByCategory(req, res) {
 
     res.status(200).json({ userSavingByCategory });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error fetching savings" });
   }
 }
@@ -118,6 +121,7 @@ async function updateSavings(req, res) {
     }
     res.status(200).json({ message: `Updated: ${updatedRow} rows` });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error updating saving" });
   }
 }
@@ -132,6 +136,7 @@ async function deleteSavings(req, res) {
     }
     res.status(200).json({ message: `Deleted: ${deletedRow} rows` });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Error deleting saving" });
   }
 }
