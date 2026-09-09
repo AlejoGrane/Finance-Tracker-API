@@ -7,6 +7,8 @@ let expenseId;
 
 beforeAll(async () => {
   await pool.query("DELETE FROM expenses");
+  await pool.query("DELETE FROM savings");
+  await pool.query("DELETE FROM investments");
   await pool.query("DELETE FROM users");
 
   await request(app)

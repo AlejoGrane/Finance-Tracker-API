@@ -101,8 +101,7 @@ async function updateSavings(req, res) {
     }
     if (description && typeof description !== "string") {
       return res.status(400).json({
-        message:
-          "Error updating saving, enter a valid description",
+        message: "Error updating saving, enter a valid description",
       });
     }
 
@@ -117,9 +116,7 @@ async function updateSavings(req, res) {
     if (updatedRow === 0) {
       return res.status(404).json({ message: "Saving not found" });
     }
-    res
-      .status(200)
-      .json({ message: `Updated: ${updatedRow} rows` });
+    res.status(200).json({ message: `Updated: ${updatedRow} rows` });
   } catch (error) {
     res.status(500).json({ message: "Error updating saving" });
   }

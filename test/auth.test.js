@@ -4,6 +4,8 @@ const pool = require("../src/config/db");
 
 beforeAll(async () => {
   await pool.query("DELETE FROM expenses");
+  await pool.query("DELETE FROM savings");
+  await pool.query("DELETE FROM investments");
   await pool.query("DELETE FROM users");
 });
 
