@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS finance_tracker;
 USE finance_tracker;
 
@@ -19,7 +18,9 @@ CREATE TABLE expenses (
   category ENUM('Groceries', 'Leisure', 'Electronics', 'Utilities', 'Clothing', 'Health', 'Others') NOT NULL,
   description VARCHAR(255),
   date DATE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_expenses_user_category (user_id, category),
+  INDEX idx_expenses_user_date (user_id, date)
 );
 
 -- Savings
@@ -30,7 +31,8 @@ CREATE TABLE savings (
   amount DECIMAL(10,2) NOT NULL,
   category VARCHAR(100) NOT NULL,
   description VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_savings_user_category (user_id, category)
 );
 
 -- Investments
@@ -44,5 +46,7 @@ CREATE TABLE investments (
   start_date DATE NOT NULL,
   end_date DATE,
   description VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_investments_user_category (user_id, category),
+  INDEX idx_investments_user_dates (user_id, start_date, end_date)
 );
