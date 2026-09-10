@@ -50,6 +50,14 @@ async function updateInvestments(
   id,
   userId,
 ) {
+  const [existing] = await pool.query(
+    "SELECT id FROM investments WHERE id = ? AND user_id = ?",
+    [id, userId],
+  );
+  if (existing.length === 0) {
+    return -1;
+  }
+
   const fields = [];
   const params = [];
 
@@ -81,8 +89,8 @@ async function updateInvestments(
   const query = `UPDATE investments SET ${fields.join(", ")} WHERE id = ? AND user_id = ?`;
   params.push(id, userId);
 
-  const [result] = await pool.query(query, params);
-  return result.affectedRows;
+  await pool.query(query, params);
+  return Number(id);
 }
 
 async function deleteInvestments(id, userId) {

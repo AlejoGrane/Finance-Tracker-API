@@ -17,6 +17,12 @@ async function signup(req, res) {
       });
     }
 
+    if (!password || typeof password !== "string" || password.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters long" });
+    }
+
     if (await findUserByEmail(email)) {
       return res.status(409).json({
         message: "Error creating user, email already exists",
@@ -28,6 +34,11 @@ async function signup(req, res) {
 
     res.status(201).json({ newUserId, email });
   } catch (error) {
+    if (error.code === "ER_DUP_ENTRY") {
+      return res
+        .status(409)
+        .json({ message: "Error creating user, email already exists" });
+    }
     console.error(error);
     res.status(500).json({ message: "Error creating user" });
   }

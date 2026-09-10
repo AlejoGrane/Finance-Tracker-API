@@ -24,6 +24,14 @@ async function getSavingByCategory(userId, category) {
 }
 
 async function updateSavings(amount, category, description, id, userId) {
+  const [existing] = await pool.query(
+    "SELECT id FROM savings WHERE id = ? AND user_id = ?",
+    [id, userId],
+  );
+  if (existing.length === 0) {
+    return -1;
+  }
+
   const fields = [];
   const params = [];
 
@@ -43,8 +51,8 @@ async function updateSavings(amount, category, description, id, userId) {
   const query = `UPDATE savings SET ${fields.join(", ")} WHERE id = ? AND user_id = ?`;
   params.push(id, userId);
 
-  const [result] = await pool.query(query, params);
-  return result.affectedRows;
+  await pool.query(query, params);
+  return Number(id);
 }
 
 async function deleteSavings(id, userId) {

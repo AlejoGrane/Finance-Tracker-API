@@ -32,6 +32,14 @@ async function getExpensesByDate(userId, date) {
 }
 
 async function updateExpenses(amount, category, description, date, id, userId) {
+  const [existing] = await pool.query(
+    "SELECT id FROM expenses WHERE id = ? AND user_id = ?",
+    [id, userId],
+  );
+  if (existing.length === 0) {
+    return -1;
+  }
+
   const fields = [];
   const params = [];
 
@@ -55,8 +63,8 @@ async function updateExpenses(amount, category, description, date, id, userId) {
   const query = `UPDATE expenses SET ${fields.join(", ")} WHERE id = ? AND user_id = ?`;
   params.push(id, userId);
 
-  const [result] = await pool.query(query, params);
-  return result.affectedRows;
+  await pool.query(query, params);
+  return Number(id);
 }
 
 async function deleteExpenses(id, userId) {

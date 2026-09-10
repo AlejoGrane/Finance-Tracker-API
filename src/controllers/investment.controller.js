@@ -24,7 +24,7 @@ async function createInvestments(req, res) {
       req.body;
     const userId = req.userId;
 
-    if (isNaN(amount) || amount <= 0) {
+    if (amount === null || isNaN(amount) || amount <= 0) {
       return res.status(400).json({
         message: "Error creating investment, enter a valid amount",
       });
@@ -34,7 +34,7 @@ async function createInvestments(req, res) {
         message: "Error creating investment, enter a valid category",
       });
     }
-    if (isNaN(returnRate) || returnRate <= 0) {
+    if (returnRate === null || isNaN(returnRate) || returnRate <= 0) {
       return res.status(400).json({
         message: "Error creating investment, enter a valid return rate",
       });
@@ -45,7 +45,7 @@ async function createInvestments(req, res) {
           "Error creating investment, enter a valid start date. (YYYY-MM-DD)",
       });
     }
-    if (endDate !== undefined && !isValidDate(endDate)) {
+    if (endDate !== undefined && endDate !== null && !isValidDate(endDate)) {
       return res.status(400).json({
         message:
           "Error creating investment, enter a valid end date. (YYYY-MM-DD)",
@@ -213,7 +213,11 @@ async function updateInvestments(req, res) {
           "Error updating investment, enter a valid start date. (YYYY-MM-DD)",
       });
     }
-    if (endDate !== undefined && (!endDate || !isValidDate(endDate))) {
+    if (
+      endDate !== undefined &&
+      endDate !== null &&
+      !isValidDate(endDate)
+    ) {
       return res.status(400).json({
         message:
           "Error updating investment, enter a valid end date. (YYYY-MM-DD)",
@@ -222,6 +226,7 @@ async function updateInvestments(req, res) {
     if (
       startDate !== undefined &&
       endDate !== undefined &&
+      endDate !== null &&
       startDate > endDate
     ) {
       return res.status(400).json({
@@ -245,10 +250,12 @@ async function updateInvestments(req, res) {
       userId,
     );
 
-    if (updatedRow === 0) {
+    if (updatedRow === -1) {
       return res.status(404).json({ message: "Investment not found" });
     }
-    res.status(200).json({ message: `Updated: ${updatedRow} rows` });
+    res
+      .status(200)
+      .json({ message: `Investment ${updatedRow} updated successfully` });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error updating investment" });
