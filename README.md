@@ -277,9 +277,11 @@ Saving categories are free text (not a fixed list), since users may want to name
 
 **Valid categories:** `Stock`, `Bond`, `Mutual Funds`, `ETF`, `Real State`, `Term Deposit`, `Others`
 
-`endDate` is optional — it allows representing investments with no fixed closing date (e.g. a renewable term deposit).
+`endDate` is optional — it allows representing investments with no fixed closing date (e.g. a renewable term deposit). Sending `endDate: null` on an update clears an existing end date.
 
 **Date filter:** accepts `filter=week|month|3months` as a shortcut, or `startDate`/`endDate` for a custom range.
+
+**Note on date filtering:** an investment is included in the results if it was active at any point during the requested range — not only if it started within it. Investments without an `endDate` are considered ongoing (open-ended) and will always match any date filter.
 
 ## Data model
 
@@ -300,16 +302,20 @@ expenses          savings            investments
 
 Every financial record table is linked to `users` via `user_id`, and every query filters by the authenticated user — a user can never see or modify another user's data.
 
+Indexed columns: `(user_id, category)` on `expenses`, `savings`, and `investments`; `(user_id, date)` on `expenses`; `(user_id, start_date, end_date)` on `investments`.
+
 ## Security
 
-- Passwords hashed with `bcrypt` before being stored
+- Passwords hashed with `bcrypt` before being stored, with a minimum length requirement
 - Stateless authentication with JWT (1 hour expiration)
 - All queries use parameterized placeholders (SQL injection protection)
 - Input validation on every endpoint (types, formats, allowed values)
 - Body size limit (10kb) to prevent abusive payloads
 - Security headers via `helmet`
 - 404 handler for undefined routes
+- Dedicated handler for malformed JSON bodies
 - Errors are logged server-side (`console.error`) without leaking internal details to the client
+- Docker image runs as a non-root user; `.dockerignore` keeps secrets and local files out of the build context
 
 ## Author
 
