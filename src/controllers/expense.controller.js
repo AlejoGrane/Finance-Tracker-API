@@ -6,7 +6,7 @@ const {
   updateExpenses: updateExpensesInDb,
   deleteExpenses: deleteExpensesInDb,
 } = require("../models/expense.model");
-const { isValidDate } = require("../utils/validators");
+const { isValidDate, isValidAmount } = require("../utils/validators");
 
 const CATEGORIES = [
   "Groceries",
@@ -23,7 +23,7 @@ async function createExpenses(req, res) {
     const { amount, category, description, date } = req.body;
     const userId = req.userId;
 
-    if (amount === null || isNaN(amount) || amount < 0) {
+    if (!isValidAmount(amount)) {
       return res.status(400).json({
         message: "Error creating expense, enter a valid amount",
       });
@@ -130,7 +130,7 @@ async function updateExpenses(req, res) {
         .json({ message: "Must provide at least one field to update" });
     }
 
-    if (amount !== undefined && (isNaN(amount) || amount < 0)) {
+    if (amount !== undefined && !isValidAmount(amount)) {
       return res.status(400).json({
         message: "Error updating expense, enter a valid amount",
       });

@@ -5,13 +5,14 @@ const {
   updateSavings: updateSavingsInDb,
   deleteSavings: deleteSavingsInDb,
 } = require("../models/saving.model");
+const { isValidAmount } = require("../utils/validators");
 
 async function createSavings(req, res) {
   try {
     const { amount, category, description } = req.body;
     const userId = req.userId;
 
-    if (amount === null || isNaN(amount) || amount <= 0) {
+    if (!isValidAmount(amount)) {
       return res.status(400).json({
         message: "Error creating saving, enter a valid amount",
       });
@@ -92,7 +93,7 @@ async function updateSavings(req, res) {
         .json({ message: "Must provide at least one field to update" });
     }
 
-    if (amount !== undefined && (isNaN(amount) || amount <= 0)) {
+    if (amount !== undefined && !isValidAmount(amount)) {
       return res.status(400).json({
         message: "Error updating saving, enter a valid amount",
       });

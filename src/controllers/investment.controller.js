@@ -6,7 +6,11 @@ const {
   updateInvestments: updateInvestmentsInDb,
   deleteInvestments: deleteInvestmentsInDb,
 } = require("../models/investment.model");
-const { isValidDate, calculateDateRange } = require("../utils/validators");
+const {
+  isValidDate,
+  isValidAmount,
+  calculateDateRange,
+} = require("../utils/validators");
 
 const CATEGORIES = [
   "Stock",
@@ -24,7 +28,7 @@ async function createInvestments(req, res) {
       req.body;
     const userId = req.userId;
 
-    if (amount === null || isNaN(amount) || amount <= 0) {
+    if (!isValidAmount(amount)) {
       return res.status(400).json({
         message: "Error creating investment, enter a valid amount",
       });
@@ -34,7 +38,7 @@ async function createInvestments(req, res) {
         message: "Error creating investment, enter a valid category",
       });
     }
-    if (returnRate === null || isNaN(returnRate) || returnRate <= 0) {
+    if (!isValidAmount(returnRate)) {
       return res.status(400).json({
         message: "Error creating investment, enter a valid return rate",
       });
@@ -192,7 +196,7 @@ async function updateInvestments(req, res) {
         .json({ message: "Must provide at least one field to update" });
     }
 
-    if (amount !== undefined && (isNaN(amount) || amount <= 0)) {
+    if (amount !== undefined && !isValidAmount(amount)) {
       return res.status(400).json({
         message: "Error updating investment, enter a valid amount",
       });
@@ -202,7 +206,7 @@ async function updateInvestments(req, res) {
         message: "Error updating investment, enter a valid category",
       });
     }
-    if (returnRate !== undefined && (isNaN(returnRate) || returnRate <= 0)) {
+    if (returnRate !== undefined && !isValidAmount(returnRate)) {
       return res.status(400).json({
         message: "Error updating investment, enter a valid return rate",
       });

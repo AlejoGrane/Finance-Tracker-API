@@ -1,8 +1,21 @@
+const MAX_DECIMAL_10_2 = 99999999.99;
+
 function isValidDate(dateString) {
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-  if (!regex.test(dateString)) return false;
+  if (typeof dateString !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    return false;
+  }
   const date = new Date(dateString);
-  return !isNaN(date.getTime());
+  if (isNaN(date.getTime())) return false;
+  return date.toISOString().slice(0, 10) === dateString;
+}
+
+function isValidAmount(amount, { allowZero = false } = {}) {
+  if (amount === null || amount === undefined) return false;
+  if (isNaN(amount)) return false;
+  const numericAmount = Number(amount);
+  if (allowZero ? numericAmount < 0 : numericAmount <= 0) return false;
+  if (numericAmount > MAX_DECIMAL_10_2) return false;
+  return true;
 }
 
 function calculateDateRange(filter) {
@@ -29,5 +42,7 @@ function calculateDateRange(filter) {
 
 module.exports = {
   isValidDate,
+  isValidAmount,
   calculateDateRange,
+  MAX_DECIMAL_10_2,
 };
